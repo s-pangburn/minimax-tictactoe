@@ -21,9 +21,18 @@ class Board
     print "\n"
   end
 
-  #Update the game board at coordinates(x, y) with character player
+  def get_coordinate(x, y)
+    @game_board[x][y]
+  end
+
+  #Update the game board at coordinates(x, y), return success
   def update(player, x, y)
-    @game_board[x][y] = player
-    puts "Updated board at coordinates (#{x}, #{y})"
+    if @game_board[x][y] == "."
+      @game_board[x][y] = player
+      puts "Updated board at coordinates (#{x}, #{y})"
+      true
+    else
+      false
+    end
   end
 end
