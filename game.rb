@@ -17,17 +17,28 @@ class Game
 
       print "X's turn. Please enter the coordinates ",
             "of your move (x, y): "
-      move = get_input
-      @board.update('X', move[0], move[1])
+      make_move('X')
 
       @board.draw
 
-      print "O's turn. Please enter the coordinates "
+      print "O's turn. Please enter the coordinates ",
             "of your move (x, y): "
-      move = get_input
-      @board.update('O', move[0], move[1])
+      make_move('O')
 
       # break
+    end
+  end
+
+  private
+
+  def make_move(player)
+    loop do
+      move = get_input
+      if @board.update(player, move[0], move[1])
+        break
+      else
+        print "That space is already taken. Try again: "
+      end
     end
   end
 
@@ -36,7 +47,7 @@ class Game
     loop do
       input = gets.chomp
       exit if input == "quit" || input == "q"
-      move = input.match(/^\(?(\d+),?\s+(\d+)\)?/)
+      move = input.match(/^\(?(\d+),?\s*(\d+)\)?/)
 
       if !move.nil? && !move[1].empty? && !move[2].empty?
         result[0] = move[1].to_i
