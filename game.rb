@@ -8,30 +8,41 @@ class Game
     @board = Board.new
   end
 
+  # Main game loop
   def start
-    puts "Tic Tac Toe - version 0.0.1"
+    winner = "draw"
+    puts "\n Tic Tac Toe"
+    @board.draw
 
-    # Game Loop
     while true
-      @board.draw
+      move = make_move('X')
+      if check_win(move)
+        winner = @board.get_coordinate(move[0], move[1])
+        break
+      end
+      break if @board.full?
 
-      print "X's turn. Please enter the coordinates ",
-            "of your move (x, y): "
-      make_move('X')
+      move = make_move('O')
+      if check_win(move)
+        winner = @board.get_coordinate(move[0], move[1])
+        break
+      end
+      break if @board.full?
+    end
 
-      @board.draw
-
-      print "O's turn. Please enter the coordinates ",
-            "of your move (x, y): "
-      make_move('O')
-
-      # break
+    if winner != "draw"
+      puts "#{winner} wins!"
+    else
+      puts "The board is full. Game over!"
     end
   end
 
   private
 
   def make_move(player)
+    move = []
+    print "#{player}'s turn. Please enter the coordinates ",
+          "of your move (x, y): "
     loop do
       move = get_input
       if @board.update(player, move[0], move[1])
@@ -40,6 +51,8 @@ class Game
         print "That space is already taken. Try again: "
       end
     end
+    @board.draw
+    move
   end
 
   def get_input()
@@ -62,6 +75,14 @@ class Game
       end
     end
     result
+  end
+
+  def check_win(move)
+    if @board.check_win(move[0], move[1])
+      true
+    else
+      false
+    end
   end
 end
 
