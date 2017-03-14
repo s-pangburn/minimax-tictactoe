@@ -63,12 +63,12 @@ class Game
       move = input.match(/^\(?(\d+),?\s*(\d+)\)?/)
 
       if !move.nil? && !move[1].empty? && !move[2].empty?
-        result[0] = move[1].to_i
-        result[1] = move[2].to_i
+        result[0] = move[1].to_i - 1
+        result[1] = move[2].to_i - 1
         if result[0].between?(0,2) && result[1].between?(0,2)
           break
         else
-          print "Please enter coordinates between (0, 0) and (2, 2): "
+          print "Please enter coordinates between (1, 1) and (3, 3): "
         end
       else
         print "Invalid input, please try again: "

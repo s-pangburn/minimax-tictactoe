@@ -11,8 +11,8 @@ class Board
 
   # Draw the board in console
   def draw
-    print "\n    0  1  2  \n\n"
-    row = 0
+    print "\n    1  2  3  \n\n"
+    row = 1
     @board.each do |i|
       print " #{row} "
       i.each do |j|
@@ -32,7 +32,7 @@ class Board
   def update(player, x, y)
     if @board[x][y] == "."
       @board[x][y] = player
-      puts "Updated board at coordinates (#{x}, #{y})"
+      puts "Updated board at coordinates (#{x+1}, #{y+1})"
       true
     else
       false
