@@ -3,8 +3,8 @@ require './board'
 
 class Game
   def initialize
-    @enemy = MinimaxAI.new('O')
     @board = Board.new
+    @enemy = MinimaxAI.new('O')
   end
 
   # Main game loop
@@ -14,23 +14,16 @@ class Game
     @board.draw
 
     while true
-      move = make_move('X')
+      make_move('X')
       if check_win('X')
-        winner = @board.get_coordinate(move[0], move[1])
+        winner = 'X'
         break
       end
       break if @board.full?
 
-      puts "Opponent is thinking...\n"
-      move = @enemy.make_move(@board)
-      if @board.update('O', move[0], move[1])
-        @board.draw
-        puts "Opponent chose coordinates (#{move[0]+1}, #{move[1]+1})\n"
-      else
-        puts "Something went wrong. The opponent made an illegal move.\n"
-      end
+      @enemy.make_move(@board)
       if check_win('O')
-        winner = @board.get_coordinate(move[0], move[1])
+        winner = 'O'
         break
       end
       break if @board.full?
