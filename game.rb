@@ -1,10 +1,9 @@
-require './player'
+require './minimax'
 require './board'
 
 class Game
   def initialize
-    @player_1 = Player.new('X')
-    @player_2 = Player.new('O')
+    @enemy = MinimaxAI.new('O')
     @board = Board.new
   end
 
@@ -16,14 +15,21 @@ class Game
 
     while true
       move = make_move('X')
-      if check_win(move)
+      if check_win('X')
         winner = @board.get_coordinate(move[0], move[1])
         break
       end
       break if @board.full?
 
-      move = make_move('O')
-      if check_win(move)
+      puts "Opponent is thinking...\n"
+      move = @enemy.make_move(@board)
+      if @board.update('O', move[0], move[1])
+        @board.draw
+        puts "Opponent chose coordinates (#{move[0]+1}, #{move[1]+1})\n"
+      else
+        puts "Something went wrong. The opponent made an illegal move.\n"
+      end
+      if check_win('O')
         winner = @board.get_coordinate(move[0], move[1])
         break
       end
@@ -46,12 +52,13 @@ class Game
     loop do
       move = get_input
       if @board.update(player, move[0], move[1])
+        @board.draw
+        puts "Updated board at coordinates (#{move[0]+1}, #{move[1]+1})"
         break
       else
         print "That space is already taken. Try again: "
       end
     end
-    @board.draw
     move
   end
 
@@ -77,8 +84,8 @@ class Game
     result
   end
 
-  def check_win(move)
-    if @board.check_win(move[0], move[1])
+  def check_win(player)
+    if @board.check_win(player)
       true
     else
       false
