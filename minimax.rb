@@ -9,10 +9,10 @@ class MinimaxAI
   # Evaluates board based on minimax, then returns the optimal move
   def make_move(board)
     puts "Opponent is thinking...\n"
-    minimax(board, @char)
-    if @board.update('O', @choice[0], @choice[1])
-      @board.draw
-      puts "Opponent chose coordinates (#{move[0]+1}, #{move[1]+1})\n"
+    minimax(board, @char, 0)
+    if board.update('O', @choice[0], @choice[1])
+      board.draw
+      puts "Opponent chose coordinates (#{@choice[0]+1}, #{@choice[1]+1})\n"
     else
       puts "Something went wrong. The opponent made an illegal move.\n"
     end
@@ -21,8 +21,9 @@ class MinimaxAI
   private
 
   # Minimax implementation
-  def minimax(board, turn)
-    return score(board) if board.finished?
+  def minimax(board, turn, depth)
+    return score(board, depth) if board.finished?
+    depth += 1
     scores = []
     moves = []
 
@@ -31,11 +32,11 @@ class MinimaxAI
       if turn == @char
         possible_move = Marshal::load(Marshal.dump(board))
         possible_move.update(@char, move[0], move[1])
-        scores.push minimax(possible_move, @opponent)
+        scores.push minimax(possible_move, @opponent, depth)
       else
         possible_move = Marshal::load(Marshal.dump(board))
         possible_move.update(@opponent, move[0], move[1])
-        scores.push minimax(possible_move, @char)
+        scores.push minimax(possible_move, @char, depth)
       end
       moves.push move
     end
@@ -53,11 +54,11 @@ class MinimaxAI
   end
 
   # Board evaluation heuristic
-  def score(board)
+  def score(board, depth)
     if board.check_win(@char)
-      return 10
+      return 100 - depth
     elsif board.check_win(@opponent)
-      return -10
+      return -100 + depth
     else
       return 0
     end
