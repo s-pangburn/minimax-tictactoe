@@ -30,11 +30,11 @@ class MinimaxAI
     # Score every possible move and allocate into tracking variables
     board.get_legal_moves.each do |move|
       if turn == @char
-        possible_move = Marshal::load(Marshal.dump(board))
+        possible_move = Marshal::load(Marshal.dump(board)) # Creates an exact duplicate
         possible_move.update(@char, move[0], move[1])
         scores.push minimax(possible_move, @opponent, depth)
       else
-        possible_move = Marshal::load(Marshal.dump(board))
+        possible_move = Marshal::load(Marshal.dump(board)) 
         possible_move.update(@opponent, move[0], move[1])
         scores.push minimax(possible_move, @char, depth)
       end
